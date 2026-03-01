@@ -34,7 +34,6 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--color-background);
             color: var(--color-on-surface);
-            /* Utilisation de dvh pour le plein écran réel sur mobile */
             min-height: 100dvh;
             width: 100%;
             display: flex;
@@ -49,15 +48,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .card-container {
             background-color: var(--color-surface);
-            padding: clamp(20px, 8vw, 40px) 24px;
+            padding: clamp(20px, 6vw, 35px) 24px;
             border-radius: 32px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
             text-align: center;
             position: relative;
@@ -74,10 +73,10 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(168, 199, 250, 0.15);
             border: none;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -87,21 +86,22 @@
             z-index: 10;
         }
 
-        #share-btn:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.9); }
-        #share-btn svg { width: 20px; height: 20px; fill: white; }
+        #share-btn:active { background: var(--color-primary); transform: scale(0.9); }
+        #share-btn:active svg { fill: var(--color-on-primary); }
+        #share-btn svg { width: 22px; height: 22px; fill: var(--color-primary); }
 
         .logo {
-            width: 140px;
-            max-width: 50%;
+            width: 130px;
+            max-width: 45%;
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
         }
 
-        h1 { font-size: clamp(20px, 6vw, 26px); font-weight: 700; margin-bottom: 4px; }
-        .title { color: var(--color-primary); font-size: 14px; margin-bottom: 24px; font-weight: 500; }
+        h1 { font-size: clamp(22px, 7vw, 28px); font-weight: 700; margin-bottom: 4px; }
+        .title { color: var(--color-primary); font-size: 15px; margin-bottom: 20px; font-weight: 500; }
 
-        .contact-list { text-align: left; margin-bottom: 24px; }
+        .contact-list { text-align: left; margin-bottom: 20px; }
         
         .contact-link {
             display: flex;
@@ -129,13 +129,18 @@
 
         .qr-wrapper {
             background: white;
-            padding: 10px;
-            border-radius: 16px;
+            padding: 12px;
+            border-radius: 20px;
             display: inline-block;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
-        #qrcode-canvas { display: block; width: 130px !important; height: 130px !important; }
+        /* Taille du QR Code augmentée */
+        #qrcode-canvas { 
+            display: block; 
+            width: 180px !important; 
+            height: 180px !important; 
+        }
 
         .btn-main {
             width: 100%;
@@ -143,7 +148,7 @@
             border-radius: 20px;
             border: none;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 15px;
             background-color: var(--color-primary);
             color: var(--color-on-primary);
             cursor: pointer;
@@ -152,16 +157,18 @@
             justify-content: center;
             gap: 10px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             transition: var(--transition);
         }
 
-        .btn-main:active { transform: scale(0.97); }
+        .btn-main:active { transform: scale(0.97); background-color: white; }
     </style>
 </head>
 <body>
 
     <div class="viewport-wrapper">
         <div class="card-container">
+            <!-- Bouton de partage natif Chrome -->
             <button id="share-btn" onclick="openShareMenu()" title="Partager">
                 <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
             </button>
@@ -216,7 +223,7 @@
             const canvas = document.getElementById('qrcode-canvas');
             if (window.QRCode) {
                 QRCode.toCanvas(canvas, vCardValue, { 
-                    width: 250, 
+                    width: 300, 
                     margin: 0,
                     color: { dark: '#121212', light: '#ffffff' }
                 });
@@ -224,18 +231,26 @@
         }
 
         async function openShareMenu() {
+            // Vérification stricte du support de partage
             if (navigator.share) {
                 try {
                     await navigator.share({
                         title: contact.fn,
-                        text: `Coordonnées de ${contact.fn} - ${contact.org}`,
+                        text: `Carte de visite numérique de ${contact.fn}`,
                         url: contact.url
                     });
                 } catch (e) {
-                    console.log("Menu de partage fermé ou erreur.");
+                    console.log("Partage annulé ou erreur.");
                 }
             } else {
-                console.log("Le partage n'est pas supporté par ce navigateur (nécessite HTTPS).");
+                // Secours pour les navigateurs non compatibles ou non HTTPS
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = contact.url;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                alert("Le lien a été copié dans votre presse-papier.");
             }
         }
 

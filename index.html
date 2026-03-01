@@ -2,12 +2,13 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>François Masson - Infragenia</title>
     
-    <!-- Méta-tags pour le plein écran mobile -->
+    <!-- Paramètres Plein Écran pour Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#121212">
 
     <!-- Librairie QRCode -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
@@ -19,7 +20,6 @@
             --color-on-surface: #e0e0e0;
             --color-primary: #a8c7fa;
             --color-on-primary: #072d5e;
-            --color-secondary-text: #bdbdbd;
             --transition: all 0.3s ease;
         }
 
@@ -34,32 +34,27 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--color-background);
             color: var(--color-on-surface);
+            /* Utilisation de dvh pour le plein écran réel sur mobile */
+            min-height: 100dvh;
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            /* Empêche le défilement rebondissant sur iOS */
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Conteneur principal adaptatif */
         .viewport-wrapper {
             width: 100%;
-            height: 100%;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .card-container {
             background-color: var(--color-surface);
-            padding: 40px 24px;
+            padding: clamp(20px, 8vw, 40px) 24px;
             border-radius: 32px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             max-width: 400px;
@@ -89,58 +84,58 @@
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
+            z-index: 10;
         }
 
         #share-btn:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.9); }
         #share-btn svg { width: 20px; height: 20px; fill: white; }
 
         .logo {
-            width: 150px;
+            width: 140px;
+            max-width: 50%;
             height: auto;
             margin-bottom: 20px;
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
         }
 
-        h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.5px; }
-        .title { color: var(--color-primary); font-size: 15px; margin-bottom: 30px; font-weight: 500; }
+        h1 { font-size: clamp(20px, 6vw, 26px); font-weight: 700; margin-bottom: 4px; }
+        .title { color: var(--color-primary); font-size: 14px; margin-bottom: 24px; font-weight: 500; }
 
         .contact-list { text-align: left; margin-bottom: 24px; }
         
         .contact-link {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
+            padding: 12px 16px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 16px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-decoration: none;
             color: inherit;
             transition: var(--transition);
-            border: 1px solid transparent;
         }
 
-        .contact-link:active { background: rgba(255, 255, 255, 0.1); border-color: var(--color-primary); }
+        .contact-link:active { background: rgba(255, 255, 255, 0.1); }
 
         .contact-link svg {
             width: 20px;
             height: 20px;
             fill: var(--color-primary);
-            margin-right: 14px;
+            margin-right: 12px;
             flex-shrink: 0;
         }
 
-        .contact-link span { font-size: 14px; font-weight: 400; line-height: 1.4; }
+        .contact-link span { font-size: 13px; line-height: 1.4; word-break: break-word; }
 
         .qr-wrapper {
             background: white;
-            padding: 12px;
-            border-radius: 20px;
+            padding: 10px;
+            border-radius: 16px;
             display: inline-block;
             margin-bottom: 24px;
-            transition: var(--transition);
         }
 
-        #qrcode-canvas { display: block; width: 140px !important; height: 140px !important; }
+        #qrcode-canvas { display: block; width: 130px !important; height: 130px !important; }
 
         .btn-main {
             width: 100%;
@@ -157,39 +152,17 @@
             justify-content: center;
             gap: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             transition: var(--transition);
         }
 
-        .btn-main:active { transform: scale(0.97); opacity: 0.9; }
-
-        /* Notification Toast au lieu d'une alerte */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #323232;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #toast.show { transform: translateX(-50%) translateY(0); }
+        .btn-main:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
 
     <div class="viewport-wrapper">
         <div class="card-container">
-            <button id="share-btn" onclick="copyToClipboard()" title="Partager">
+            <button id="share-btn" onclick="openShareMenu()" title="Partager">
                 <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
             </button>
 
@@ -228,12 +201,6 @@
         </div>
     </div>
 
-    <!-- Notification discrète -->
-    <div id="toast">
-        <svg style="width:20px;height:20px;fill:#a8c7fa" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        Lien copié dans le presse-papier
-    </div>
-
     <script>
         const contact = {
             fn: 'François Masson',
@@ -256,29 +223,19 @@
             } else { setTimeout(renderQR, 200); }
         }
 
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        async function copyToClipboard() {
-            try {
-                // Tente d'abord le partage natif (plus propre sur mobile)
-                if (navigator.share) {
-                    await navigator.share({ title: contact.fn, url: contact.url });
-                } else {
-                    throw new Error('Share not supported');
+        async function openShareMenu() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: contact.fn,
+                        text: `Coordonnées de ${contact.fn} - ${contact.org}`,
+                        url: contact.url
+                    });
+                } catch (e) {
+                    console.log("Menu de partage fermé ou erreur.");
                 }
-            } catch (e) {
-                // Secours : Copie dans le presse-papier
-                const el = document.createElement('textarea');
-                el.value = contact.url;
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-                showToast();
+            } else {
+                console.log("Le partage n'est pas supporté par ce navigateur (nécessite HTTPS).");
             }
         }
 

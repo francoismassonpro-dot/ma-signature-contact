@@ -3,203 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte de Visite Numérique - François Masson</title>
+    <title>François Masson - Infragenia</title>
     
-    <!-- 
-        Tentative de chargement de la librairie QRCode (Version Build Navigateur).
-        Si ce script est bloqué, le code JS basculera sur une API externe.
-    -->
+    <!-- QRCode Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
     <style>
-        /* Couleurs du Thème Sombre (Inspiré Material Design 3) */
         :root {
-            --color-surface: #1e1e1e;   /* Fond de carte */
-            --color-background: #121212; /* Fond de la page */
-            --color-on-surface: #e0e0e0; /* Texte principal clair */
-            --color-primary: #a8c7fa;    /* Accent principal (boutons, liens) */
-            --color-on-primary: #1e1e1e; /* Texte sur le primaire */
-            --color-secondary-text: #bdbdbd; /* Texte secondaire/gris */
+            --color-surface: #1e1e1e;
+            --color-background: #121212;
+            --color-on-surface: #e0e0e0;
+            --color-primary: #a8c7fa;
+            --color-on-primary: #1e1e1e;
+            --color-secondary-text: #bdbdbd;
         }
 
-        /* Styles de base */
         body {
-            font-family: 'Inter', sans-serif; /* Utilisation d'une police moderne */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--color-background);
-            /* Utilisation de Flexbox pour centrer parfaitement */
             display: flex;
-            justify-content: center; /* Centrage horizontal */
-            align-items: center; /* Centrage vertical */
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
             margin: 0;
             color: var(--color-on-surface);
         }
 
-        /* Conteneur de la carte (Surface M3) */
         .card-container {
             background-color: var(--color-surface);
-            padding: 30px;
-            border-radius: 16px; 
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
-            
-            /* Contrôle de la taille de la carte elle-même */
-            max-width: 350px; 
-            min-width: 280px; 
-            width: 90%;       
-
+            padding: 32px 24px;
+            border-radius: 24px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            max-width: 360px;
+            width: 90%;
             text-align: center;
-            transition: box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
-        /* Logo/Photo de profil (Rectangulaire) */
         .logo {
-            width: 180px;
-            height: 120px; 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
-            object-fit: contain; 
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            width: 160px;
+            height: auto;
+            max-height: 100px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            object-fit: contain;
             display: block;
             margin-left: auto;
             margin-right: auto;
         }
 
         h1 {
-            color: var(--color-on-surface);
-            font-size: 28px; 
+            font-size: 26px;
             font-weight: 700;
-            margin: 0 0 5px 0; 
+            margin: 0 0 4px 0;
+            letter-spacing: -0.5px;
         }
 
         .title {
-            color: var(--color-primary); 
-            font-size: 16px; 
+            color: var(--color-primary);
+            font-size: 16px;
             font-weight: 500;
-            margin-bottom: 25px; 
+            margin-bottom: 28px;
         }
 
-        /* Section des coordonnées */
+        .contact-info {
+            text-align: left;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
         .contact-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 10px 0; 
+            margin: 12px 0;
         }
 
         .contact-item a {
-            color: var(--color-secondary-text); 
+            color: var(--color-secondary-text);
             text-decoration: none;
-            transition: color 0.3s ease;
-            margin-left: 10px; 
-            font-size: 15px; 
+            margin-left: 12px;
+            font-size: 15px;
+            transition: color 0.2s;
         }
+
         .contact-item a:hover {
-            color: var(--color-primary); 
+            color: var(--color-primary);
         }
-        
+
         .contact-item svg {
-            width: 18px; 
-            height: 18px; 
-            fill: var(--color-secondary-text); 
+            width: 20px;
+            height: 20px;
+            fill: var(--color-primary);
             flex-shrink: 0;
         }
 
-        /* Section des liens sociaux */
         .social-links {
-            margin-top: 30px; 
-            margin-bottom: 30px; 
+            margin: 24px 0;
             display: flex;
             justify-content: center;
-            gap: 20px; 
+            gap: 24px;
         }
+
         .social-links a svg {
-            width: 28px; 
-            height: 28px; 
+            width: 32px;
+            height: 32px;
             fill: var(--color-secondary-text);
-            transition: fill 0.3s ease;
+            transition: fill 0.2s, transform 0.2s;
         }
+
         .social-links a:hover svg {
-            fill: var(--color-primary); 
-        }
-        
-        /* --- Styles du QR Code --- */
-        .qrcode-style {
-            margin-bottom: 30px;
-            padding: 15px;
-            background-color: #ffffff; /* Fond blanc pour assurer le contraste du QR Code */
-            border-radius: 12px;
-            display: inline-block; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        
-        .qrcode-label {
-            color: #333333; /* Texte sombre sur fond blanc */
-            font-size: 14px;
-            margin-top: 10px;
-            margin-bottom: 0;
-            font-weight: 500;
+            fill: var(--color-primary);
+            transform: translateY(-2px);
         }
 
-        /* Image QR Code */
-        #qrcode-img { 
-            width: 150px; 
-            height: 150px;
+        .qrcode-section {
+            margin-top: 24px;
+            background-color: #ffffff;
+            padding: 16px;
+            border-radius: 16px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        #qrcode-img {
+            width: 140px;
+            height: 140px;
             display: block;
-            /* Placeholder animé pendant le chargement */
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
         }
 
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .qrcode-label {
+            color: #121212;
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
-        /* ------------------------ */
 
         .cta-button {
             display: block;
-            padding: 14px 24px; 
+            padding: 16px 32px;
             background-color: var(--color-primary);
-            color: var(--color-on-primary); 
+            color: var(--color-on-primary);
             text-decoration: none;
-            font-weight: bold;
-            border-radius: 24px; 
-            margin-top: 30px; 
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            font-size: 18px;
+            font-weight: 700;
+            border-radius: 30px;
+            margin-top: 32px;
+            box-shadow: 0 4px 12px rgba(168, 199, 250, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 16px;
         }
+
         .cta-button:hover {
-            background-color: #d1e5ff; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            background-color: #c2d7ff;
+            transform: scale(1.02);
         }
+
+        /* Skeleton loader for QR */
+        .loading-qr {
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .loading-qr::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
     </style>
 </head>
 <body>
     <div class="card-container">
-        <!-- Logo Infragenia -->
+        <!-- Logo -->
         <img src="https://lh3.googleusercontent.com/d/17zHyHT_kdcsZsJsI-hPxKYMySj0Eu9El" 
-             alt="Logo Infragenia" 
+             alt="Infragenia" 
              class="logo"
-             onerror="this.onerror=null; this.src='https://placehold.co/180x120/1e1e1e/a8c7fa?text=Infragenia'"> 
+             onerror="this.src='https://placehold.co/180x120/1e1e1e/a8c7fa?text=Infragenia'">
         
         <h1>François Masson</h1>
         <p class="title">Président chez Infragenia</p>
         
         <div class="contact-info">
-            <!-- Téléphone -->
             <div class="contact-item">
-                <svg viewBox="0 0 24 24"><path d="M19.95 18.15c-.45-.45-1-.6-1.55-.45-1.1.3-2.3.45-3.55.45-1.35 0-2.6-.15-3.7-.45-1.2-.35-2.2-.85-3.15-1.8-1.05-.95-1.6-2.15-1.95-3.45-.3-1.15-.45-2.35-.45-3.5 0-1.25.15-2.45.45-3.55.15-.55.3-1.1.45-1.55.15-.55 0-1.1-.45-1.55L4.4 3.9c-.35-.35-.75-.5-1.2-.5-.45 0-.85.15-1.2.45-.5.5-.75 1.1-.75 1.75 0 1.25.15 2.5.45 3.75.4 1.7 1.2 3.3 2.3 4.8 1.45 1.8 3.3 3.3 5.3 4.3 2 1.05 4.15 1.7 6.4 2.05 1.25.3 2.5.45 3.75.45.65 0 1.25-.25 1.75-.75.3-.3.45-.7.45-1.2 0-.45-.15-.85-.45-1.2z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                 <a href="tel:+33689234283">+33 6 89 23 42 83</a>
             </div>
-            <!-- Email -->
             <div class="contact-item">
-                <svg viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                 <a href="mailto:francois.masson@infragenia.com">francois.masson@infragenia.com</a>
             </div>
-            <!-- Site Web -->
-            <div class="contact-item" style="margin-bottom: 25px;"> 
+            <div class="contact-item">
                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.95-7-7.93 0-.68.11-1.34.31-1.97l6.69 6.69v3.21zm-7.9-10.87c.18-.74.45-1.47.8-2.14l5.13 5.13-5.93-2.99zm4.25-6.84c.67-.35 1.4-.62 2.14-.8L7.84 9.1l-2.99-5.93zm6.84-4.25c.74.18 1.47.45 2.14.8l-5.13 5.13 2.99 5.93zm-3.21 7.9c.49 3.95 3.95 7 7.93 7 .68 0 1.34-.11 1.97-.31L12.07 12l-3.21 3.21z"/></svg>
                 <a href="https://www.infragenia.com" target="_blank">www.infragenia.com</a>
             </div>
@@ -207,90 +206,87 @@
 
         <div class="social-links">
             <a href="https://www.linkedin.com/in/francois-m-863383212/" target="_blank" aria-label="LinkedIn">
-                <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.565-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.355 7 3.391v5.844z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
             </a>
         </div>
 
-        <!-- Conteneur QR Code -->
-        <div id="qrcode-container" class="qrcode-style">
-            <img id="qrcode-img" alt="QR Code VCard" src="">
-            <p class="qrcode-label">Scannez pour ajouter le contact</p>
+        <div class="qrcode-section">
+            <img id="qrcode-img" alt="QR Code" class="loading-qr">
+            <p class="qrcode-label">Ajouter au répertoire</p>
         </div>
         
-        <a href="Francois-Masson-Infragenia.vcf" download="Francois-Masson-Infragenia.vcf" class="cta-button">
-            TÉLÉCHARGER LA VCARD
-        </a>
+        <button id="vcard-btn" class="cta-button">
+            ENREGISTRER LE CONTACT
+        </button>
     </div>
 
     <script>
-        // Fonction principale
-        window.onload = function () {
-            
-            // 1. Données
-            const contactData = {
-                name: 'Masson',
-                firstName: 'François',
-                title: 'Président',
-                org: 'Infragenia',
-                tel: '+33689234283',
-                email: 'francois.masson@infragenia.com',
-                url: 'https://www.infragenia.com',
-                linkedin: 'https://www.linkedin.com/in/francois-m-863383212/'
-            };
+        const contactData = {
+            lastName: 'Masson',
+            firstName: 'François',
+            title: 'Président',
+            org: 'Infragenia',
+            tel: '+33689234283',
+            email: 'francois.masson@infragenia.com',
+            url: 'https://www.infragenia.com',
+            linkedin: 'https://www.linkedin.com/in/francois-m-863383212/'
+        };
 
-            // 2. Création de la VCard
-            const vCardContent = [
-                'BEGIN:VCARD',
-                'VERSION:3.0',
-                `N:${contactData.name};${contactData.firstName};;;`,
-                `FN:${contactData.firstName} ${contactData.name}`,
-                `ORG:${contactData.org}`,
-                `TITLE:${contactData.title}`,
-                `TEL;TYPE=WORK,VOICE:${contactData.tel}`,
-                `EMAIL;TYPE=PREF,INTERNET:${contactData.email}`,
-                `URL;TYPE=WORK:${contactData.url}`,
-                `X-SOCIALPROFILE;type=linkedin;x-user=${contactData.linkedin.split('/').pop()}:${contactData.linkedin}`,
-                'END:VCARD'
-            ].join('\n'); 
+        const vCardContent = [
+            'BEGIN:VCARD',
+            'VERSION:3.0',
+            `FN:${contactData.firstName} ${contactData.lastName}`,
+            `N:${contactData.lastName};${contactData.firstName};;;`,
+            `ORG:${contactData.org}`,
+            `TITLE:${contactData.title}`,
+            `TEL;TYPE=CELL,VOICE:${contactData.tel}`,
+            `EMAIL;TYPE=WORK,INTERNET:${contactData.email}`,
+            `URL:${contactData.url}`,
+            `URL;type=LinkedIn:${contactData.linkedin}`,
+            'END:VCARD'
+        ].join('\r\n');
 
-            const imgElement = document.getElementById('qrcode-img');
-            
-            // 3. Essayer d'utiliser la librairie JS locale
+        // Generation du QR Code
+        function generateQR() {
+            const img = document.getElementById('qrcode-img');
             try {
-                if (typeof QRCode !== 'undefined' && QRCode.toDataURL) {
-                    console.log("Librairie QRCode détectée. Génération locale...");
+                if (window.QRCode) {
                     QRCode.toDataURL(vCardContent, {
-                        errorCorrectionLevel: 'M',
-                        margin: 2,
-                        type: 'image/png',
-                        color: {
-                            dark: '#000000',
-                            light: '#ffffff' // Transparent impossible pour reader, blanc préférable
-                        },
-                        width: 200
-                    }, function (error, url) {
-                        if (error) throw error;
-                        imgElement.src = url;
-                        // Retirer l'animation de chargement
-                        imgElement.style.animation = 'none';
-                        imgElement.style.background = 'none';
+                        margin: 1,
+                        width: 280,
+                        errorCorrectionLevel: 'M'
+                    }, (err, url) => {
+                        if (err) throw err;
+                        img.src = url;
+                        img.classList.remove('loading-qr');
                     });
                 } else {
-                    throw new Error("Librairie QRCode absente ou incompatible.");
+                    throw new Error('Lib not loaded');
                 }
             } catch (e) {
-                // 4. FALLBACK : Si la librairie échoue, on utilise une API publique
-                console.warn("Échec de la génération locale (" + e.message + "). Utilisation de l'API de secours.");
-                
-                // Encodage de la vCard pour l'URL
-                const encodedVCard = encodeURIComponent(vCardContent);
-                // Utilisation de l'API quickchart.io (fiable et rapide)
-                imgElement.src = `https://quickchart.io/qr?text=${encodedVCard}&size=200&ecLevel=M&margin=1`;
-                
-                imgElement.style.animation = 'none';
-                imgElement.style.background = 'none';
+                // Fallback API
+                img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(vCardContent)}`;
+                img.onload = () => img.classList.remove('loading-qr');
             }
+        }
+
+        // Telechargement VCard
+        document.getElementById('vcard-btn').onclick = function() {
+            const blob = new Blob([vCardContent], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `${contactData.firstName}-${contactData.lastName}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 100);
         };
+
+        window.onload = generateQR;
     </script>
 </body>
 </html>

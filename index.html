@@ -12,6 +12,9 @@
     <meta name="apple-mobile-web-app-title" content="Infragenia">
     <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/17zHyHT_kdcsZsJsI-hPxKYMySj0Eu9El">
 
+    <!-- Manifeste PWA Inline (pour éviter de créer un second fichier sur GitHub) -->
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIkZyYW7Dp29pcyBNYXNzb24gLSBJbmZyYWdlbmlhIiwKICAic2hvcnRfbmFtZSI6ICJJbmZyYWdlbmlhIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxMjEyMTIiLAogICJ0aGVtZV9jb2xvciI6ICIjMTIxMjEyIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2QvMTd6SHlIVF9rZGNzWnNKcyloUHhLWU15U2owRXU5RWwiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=">
+
     <!-- Librairie QRCode -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
 
@@ -62,7 +65,6 @@
             overflow: hidden;
         }
 
-        /* Bouton partager en haut à droite */
         #share-btn {
             position: absolute;
             top: 20px;
@@ -80,9 +82,7 @@
             z-index: 10;
         }
 
-        #share-btn:hover { background: rgba(255, 255, 255, 0.15); }
         #share-btn:active { transform: scale(0.9); }
-
         #share-btn svg { width: 20px; height: 20px; fill: white; }
 
         .logo {
@@ -96,7 +96,6 @@
             font-size: 26px;
             font-weight: 700;
             margin: 0 0 4px 0;
-            letter-spacing: -0.5px;
         }
 
         .title {
@@ -120,15 +119,9 @@
             margin-bottom: 10px;
             text-decoration: none;
             transition: var(--transition);
-            border: 1px solid transparent;
         }
 
-        .contact-link:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(168, 199, 250, 0.3);
-        }
-
-        .contact-link:active { transform: scale(0.98); }
+        .contact-link:active { background: rgba(255, 255, 255, 0.1); }
 
         .contact-link svg {
             width: 20px;
@@ -142,7 +135,6 @@
             color: var(--color-on-surface);
             font-size: 14px;
             font-weight: 500;
-            line-height: 1.4;
         }
 
         .qr-wrapper {
@@ -152,21 +144,12 @@
             display: inline-block;
             margin-bottom: 24px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: var(--transition);
         }
-        
-        .qr-wrapper:hover { transform: scale(1.05); }
 
         #qrcode-canvas {
             display: block;
             width: 140px !important;
             height: 140px !important;
-        }
-
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
         }
 
         .btn-main {
@@ -185,12 +168,10 @@
             background-color: var(--color-primary);
             color: var(--color-on-primary);
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(168, 199, 250, 0.2);
         }
 
-        .btn-main:active { transform: scale(0.97); }
-
         #install-btn {
+            margin-top: 12px;
             background: transparent;
             color: var(--color-primary);
             border: 1px solid var(--color-primary);
@@ -198,8 +179,7 @@
             border-radius: 12px;
             font-size: 12px;
             width: 100%;
-            cursor: pointer;
-            font-weight: 600;
+            display: none;
         }
 
         .ios-prompt {
@@ -213,24 +193,21 @@
             color: var(--color-secondary-text);
         }
 
-        .ios-icon { width: 18px; vertical-align: middle; margin: 0 2px; }
+        .ios-icon { width: 18px; vertical-align: middle; }
     </style>
 </head>
 <body>
 
     <div class="card-container">
-        <!-- Bouton Partager -->
-        <button id="share-btn" title="Partager">
+        <button id="share-btn">
             <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
         </button>
 
-        <!-- Logo -->
-        <img src="https://lh3.googleusercontent.com/d/17zHyHT_kdcsZsJsI-hPxKYMySj0Eu9El" alt="Infragenia Logo" class="logo" onerror="this.style.display='none'">
+        <img src="https://lh3.googleusercontent.com/d/17zHyHT_kdcsZsJsI-hPxKYMySj0Eu9El" alt="Infragenia Logo" class="logo">
         
         <h1>François Masson</h1>
         <p class="title">Président chez Infragenia</p>
 
-        <!-- Coordonnées -->
         <div class="contact-list">
             <a href="tel:+33689234283" class="contact-link">
                 <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
@@ -248,34 +225,41 @@
                 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                 <span>13 BIS quai de la paix nord, 30300 BEAUCAIRE</span>
             </a>
-            <!-- LinkedIn Personnel -->
             <a href="https://www.linkedin.com/in/francois-m-863383212/" target="_blank" class="contact-link">
                 <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                 <span>Mon profil LinkedIn</span>
             </a>
         </div>
 
-        <!-- QR Code -->
         <div class="qr-wrapper">
             <canvas id="qrcode-canvas"></canvas>
         </div>
 
-        <!-- Actions -->
         <div class="actions">
             <button id="vcard-btn" class="btn-main">
                 <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                 Ajouter au répertoire
             </button>
-            <button id="install-btn" style="display: none;">Installer sur mon écran d'accueil</button>
+            <button id="install-btn">Installer sur mon mobile</button>
         </div>
 
-        <!-- Aide iOS -->
         <div id="ios-hint" class="ios-prompt">
             Pour installer : appuyez sur <img src="https://img.icons8.com/ios/50/ffffff/share.png" class="ios-icon"> puis sur <strong>"Sur l'écran d'accueil"</strong>.
         </div>
     </div>
 
     <script>
+        // SERVICE WORKER INLINE (Nécessaire pour PWA)
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+            `;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            const url = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(url).catch(err => console.log("SW error", err));
+        }
+
         const contact = {
             fn: 'François Masson',
             tel: '+33689234283',
@@ -286,7 +270,7 @@
             linkedin: 'https://www.linkedin.com/in/francois-m-863383212/'
         };
 
-        const vCardValue = `BEGIN:VCARD\nVERSION:3.0\nFN:${contact.fn}\nORG:${contact.org}\nTEL;TYPE=CELL:${contact.tel}\nEMAIL:${contact.email}\nADR;TYPE=WORK:;;13 BIS quai de la paix nord;BEAUCAIRE;;30300;France\nURL:${contact.url}\nX-SOCIALMSN;TYPE=linkedin:${contact.linkedin}\nEND:VCARD`;
+        const vCardValue = `BEGIN:VCARD\nVERSION:3.0\nFN:${contact.fn}\nORG:${contact.org}\nTEL;TYPE=CELL:${contact.tel}\nEMAIL:${contact.email}\nADR;TYPE=WORK:;;13 BIS quai de la paix nord;BEAUCAIRE;;30300;France\nURL:${contact.url}\nEND:VCARD`;
 
         function renderQR() {
             const canvas = document.getElementById('qrcode-canvas');
@@ -295,8 +279,6 @@
                     width: 250,
                     margin: 0,
                     color: { dark: '#121212', light: '#ffffff' }
-                }, function (error) {
-                    if (error) console.error(error);
                 });
             } else {
                 setTimeout(renderQR, 200);
@@ -312,26 +294,6 @@
             }
         };
 
-        document.getElementById('share-btn').onclick = async () => {
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: `Contact ${contact.fn}`,
-                        text: `Voici les coordonnées de ${contact.fn} (Infragenia)`,
-                        url: contact.url
-                    });
-                } catch (err) {}
-            } else {
-                const el = document.createElement('textarea');
-                el.value = contact.url;
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-                alert("Lien copié dans le presse-papier !");
-            }
-        };
-
         document.getElementById('vcard-btn').onclick = () => {
             const blob = new Blob([vCardValue], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
@@ -341,6 +303,18 @@
             a.click();
         };
 
+        document.getElementById('share-btn').onclick = async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: contact.fn, url: contact.url });
+                } catch (err) {}
+            } else {
+                navigator.clipboard.writeText(contact.url);
+                alert("Lien copié !");
+            }
+        };
+
+        // GESTION INSTALLATION ANDROID/CHROME
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -359,3 +333,4 @@
     </script>
 </body>
 </html>
+
